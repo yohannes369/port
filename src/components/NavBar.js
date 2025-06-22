@@ -1,24 +1,14 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { Link } from "react-scroll";
 import { motion, AnimatePresence } from "framer-motion";
 
-/**
- * Responsive Navbar that transforms into a slide-in **side-drawer** on mobile.
- *
- * ‣ Locks body scroll while the drawer is open.
- * ‣ Uses Framer-Motion for buttery transitions.
- * ‣ Keeps all previous desktop behaviour / active-link highlighting.
- */
 const Navbar = () => {
-  const [navOpen, setNavOpen] = useState(false);
+  const [nav, setNav] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeLink, setActiveLink] = useState("home");
   const navRef = useRef(null);
 
-  /* ──────────────────────────────
-   * Links
-   * ────────────────────────────── */
   const links = [
     { id: 1, name: "Home", to: "home" },
     { id: 2, name: "About", to: "about" },
@@ -27,15 +17,15 @@ const Navbar = () => {
     { id: 5, name: "Contact", to: "contact" },
   ];
 
-  /* ──────────────────────────────
-   * Motion variants
-   * ────────────────────────────── */
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.3 },
-    },
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3
+      }
+    }
   };
 
   const itemVariants = {
@@ -43,182 +33,175 @@ const Navbar = () => {
     visible: {
       y: 0,
       opacity: 1,
-      transition: { type: "spring", stiffness: 100 },
+      transition: {
+        type: "spring",
+        stiffness: 100
+      }
+    }
+  };
+
+  const mobileMenuVariants = {
+    hidden: { 
+      y: "-100vh",
+      opacity: 0
     },
-  };
-
-  const overlayVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.2 } },
-    exit: { opacity: 0, transition: { duration: 0.2 } },
-  };
-
-  const sideVariants = {
-    hidden: { x: "100%" },
     visible: {
-      x: 0,
-      transition: { type: "spring", stiffness: 120, damping: 20 },
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        damping: 25,
+        stiffness: 100
+      }
     },
-    exit: { x: "100%", transition: { duration: 0.25 } },
+    exit: {
+      y: "-100vh",
+      opacity: 0,
+      transition: {
+        duration: 0.3
+      }
+    }
   };
 
-  /* ──────────────────────────────
-   * Scroll / active-link logic
-   * ────────────────────────────── */
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
-
-      const scrollPos = window.scrollY + 120; // adjust for header height
+      
+      // Highlight active section
+      const scrollPosition = window.scrollY + 100;
+      
       links.forEach(({ to }) => {
         const section = document.getElementById(to);
         if (section) {
-          const top = section.offsetTop;
-          const height = section.offsetHeight;
-          if (scrollPos >= top && scrollPos < top + height) setActiveLink(to);
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.offsetHeight;
+          
+          if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+            setActiveLink(to);
+          }
         }
       });
     };
-
+    
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  /* ──────────────────────────────
-   * Lock body scroll while drawer is open
-   * ────────────────────────────── */
-  useEffect(() => {
-    document.body.style.overflow = navOpen ? "hidden" : "";
-    return () => (document.body.style.overflow = "");
-  }, [navOpen]);
-
-  /* ──────────────────────────────
-   * Smooth-scroll helper
-   * ────────────────────────────── */
-  const scrollTo = (to) => {
-    const el = document.getElementById(to);
-    if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-    setActiveLink(to);
-    setNavOpen(false);
-  };
-
-  /* ──────────────────────────────
-   * Render
-   * ────────────────────────────── */
   return (
-    <motion.header
-      ref={navRef}
+    <motion.div 
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 100 }}
-      className={`fixed top-0 left-0 w-full h-20 flex items-center justify-between px-4 z-40 transition-all duration-300 ${
-        scrolled
-          ? "bg-gray-900/95 backdrop-blur-md shadow-lg"
-          : "bg-gray-900/90 backdrop-blur-sm"
-      }`}
+      ref={navRef}
+      className={`fixed w-full h-20 flex justify-between items-center px-4 z-50 ${
+        scrolled ? "bg-gray-900/95 backdrop-blur-md shadow-lg" : "bg-gray-900/90 backdrop-blur-sm"
+      } transition-all duration-300`}
     >
-      {/* Logo */}
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => scrollTo("home")}
+      <Link
+        to="home"
+        smooth={true}
+        duration={500}
         className="flex flex-col items-center cursor-pointer"
       >
-        <img
-          src="/log.jpg"
-          alt="Yohannes Yeneakal Logo"
-          className="w-12 h-12 object-contain rounded-full bg-white p-1"
-        />
-        <span className="text-sm font-semibold text-white mt-1 select-none">
-          Yohannes Yeneakal
-        </span>
-      </motion.button>
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex flex-col items-center"
+        >
+          <img 
+            src="/log.jpg" 
+            alt="Yohannes Yeneakla Logo" 
+            className="w-12 h-12 object-contain rounded-full bg-white p-1"
+          />
+          <span className="text-sm font-semibold text-white mt-1">
+            Yohannes Yeneakla
+          </span>
+        </motion.div>
+      </Link>
 
-      {/* Desktop nav */}
-      <motion.ul
+      {/* Desktop Navigation */}
+      <motion.ul 
         variants={containerVariants}
         initial="hidden"
         animate="visible"
         className="hidden md:flex items-center space-x-6"
       >
         {links.map(({ id, name, to }) => (
-          <motion.li key={id} variants={itemVariants} className="relative">
-            <button
-              onClick={() => scrollTo(to)}
-              className={`px-3 py-2 font-medium transition-colors relative group ${
-                activeLink === to ? "text-white" : "text-gray-300 hover:text-white"
+          <motion.li 
+            key={id}
+            variants={itemVariants}
+            className="relative"
+          >
+            <Link
+              to={to}
+              smooth={true}
+              duration={500}
+              offset={-80}
+              spy={true}
+              onSetActive={() => setActiveLink(to)}
+              className={`px-3 py-2 text-gray-300 hover:text-white transition-colors cursor-pointer font-medium relative group ${
+                activeLink === to ? "text-white" : ""
               }`}
             >
               {name}
-              {/* animated underline */}
-              <motion.span
-                layoutId="underline"
+              <motion.span 
                 className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-emerald-400 to-green-500 ${
                   activeLink === to ? "w-full" : "w-0 group-hover:w-full"
                 } transition-all duration-300`}
+                layoutId="underline"
               />
-            </button>
+            </Link>
           </motion.li>
         ))}
       </motion.ul>
 
-      {/* Burger */}
-      <motion.button
-        onClick={() => setNavOpen(!navOpen)}
+      {/* Mobile Navigation Button */}
+      <motion.div 
+        onClick={() => setNav(!nav)} 
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className="md:hidden z-50 text-gray-300 hover:text-white p-2"
-        aria-label="Toggle navigation"
+        className="md:hidden z-50 text-gray-300 hover:text-white cursor-pointer p-2"
       >
-        {navOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-      </motion.button>
+        {nav ? <FaTimes size={24} /> : <FaBars size={24} />}
+      </motion.div>
 
-      {/* Mobile overlay + side-drawer */}
+      {/* Mobile Menu */}
       <AnimatePresence>
-        {navOpen && (
-          <motion.div
-            className="fixed inset-0 flex z-40"
-            variants={overlayVariants}
+        {nav && (
+          <motion.ul 
+            variants={mobileMenuVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
+            className="md:hidden fixed top-0 left-0 w-full h-screen bg-gray-900/95 backdrop-blur-lg flex flex-col justify-center items-center z-40"
           >
-            {/* Backdrop */}
-            <div
-              className="flex-1 backdrop-blur-sm bg-black/40"
-              onClick={() => setNavOpen(false)}
-            />
-
-            {/* Side-drawer */}
-            <motion.nav
-              className="h-full w-3/4 max-w-xs bg-gray-900/95 backdrop-blur-lg p-8 flex flex-col"
-              variants={sideVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-            >
-              <ul className="space-y-6 mt-8">
-                {links.map(({ id, name, to }) => (
-                  <li key={id}>
-                    <button
-                      onClick={() => scrollTo(to)}
-                      className={`w-full text-left text-lg font-medium ${
-                        activeLink === to
-                          ? "text-emerald-400"
-                          : "text-gray-300 hover:text-white"
-                      }`}
-                    >
-                      {name}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </motion.nav>
-          </motion.div>
+            {links.map(({ id, name, to }) => (
+              <motion.li 
+                key={id} 
+                className="py-4"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Link
+                  to={to}
+                  smooth={true}
+                  duration={500}
+                  offset={-80}
+                  onClick={() => setNav(false)}
+                  className={`text-2xl px-6 py-3 rounded-lg ${
+                    activeLink === to 
+                      ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white"
+                      : "text-gray-300 hover:text-white"
+                  } transition-all`}
+                >
+                  {name}
+                </Link>
+              </motion.li>
+            ))}
+          </motion.ul>
         )}
       </AnimatePresence>
-    </motion.header>
+    </motion.div>
   );
 };
 
