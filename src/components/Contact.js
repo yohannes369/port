@@ -1,167 +1,3 @@
-
-// import React, { useRef } from "react";
-// import { motion } from "framer-motion";
-// import emailjs from "@emailjs/browser";
-// import { FaLinkedin, FaGithub, FaTwitter } from "react-icons/fa";
-// import { HiOutlineMail } from "react-icons/hi";
-
-// const Contact = () => {
-//   const form = useRef();
-
-//   const sendEmail = (e) => {
-//     e.preventDefault();
-
-//     emailjs
-//       .sendForm(
-//         "service_id",
-//         "template_id",
-//         form.current,
-//         "user_id"
-//       )
-//       .then(
-//         (result) => {
-//           alert("Message sent successfully!");
-//           form.current.reset();
-//         },
-//         (error) => {
-//           alert("Failed to send the message, please try again.");
-//         }
-//       );
-//   };
-
-//   return (
-//     <section
-//       id="contact"
-//       className="w-full min-h-screen bg-gradient-to-b from-black to-gray-800 text-white py-20 px-4"
-//     >
-//       <div className="max-w-screen-lg mx-auto">
-//         <motion.div
-//           initial={{ opacity: 0 }}
-//           whileInView={{ opacity: 1 }}
-//           transition={{ duration: 1 }}
-//           className="text-center mb-16"
-//         >
-//           <h2 className="text-4xl font-bold inline border-b-4 border-cyan-500 pb-1">
-//             Contact
-//           </h2>
-//           <p className="py-6 text-lg text-gray-300">
-//             Submit the form below or reach out through my social media
-//           </p>
-//         </motion.div>
-
-//         <div className="flex flex-col md:flex-row gap-16">
-//           <motion.div
-//             initial={{ opacity: 0, x: -50 }}
-//             whileInView={{ opacity: 1, x: 0 }}
-//             transition={{ duration: 0.8 }}
-//             className="flex-1"
-//           >
-//             <form
-//               ref={form}
-//               onSubmit={sendEmail}
-//               className="flex flex-col space-y-6"
-//             >
-//               <div>
-//                 <label htmlFor="name" className="block mb-2 text-sm font-medium">
-//                   Your Name
-//                 </label>
-//                 <input
-//                   type="text"
-//                   id="name"
-//                   name="user_name"
-//                   className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none"
-//                   required
-//                 />
-//               </div>
-//               <div>
-//                 <label htmlFor="email" className="block mb-2 text-sm font-medium">
-//                   Your Email
-//                 </label>
-//                 <input
-//                   type="email"
-//                   id="email"
-//                   name="user_email"
-//                   className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none"
-//                   required
-//                 />
-//               </div>
-//               <div>
-//                 <label htmlFor="message" className="block mb-2 text-sm font-medium">
-//                   Your Message
-//                 </label>
-//                 <textarea
-//                   id="message"
-//                   name="message"
-//                   rows="6"
-//                   className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none"
-//                   required
-//                 ></textarea>
-//               </div>
-//               <motion.button
-//                 whileHover={{ scale: 1.02 }}
-//                 whileTap={{ scale: 0.98 }}
-//                 type="submit"
-//                 className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg font-medium hover:from-blue-500 hover:to-cyan-500 transition-all duration-300"
-//               >
-//                 Send Message
-//               </motion.button>
-//             </form>
-//           </motion.div>
-
-//           <motion.div
-//             initial={{ opacity: 0, x: 50 }}
-//             whileInView={{ opacity: 1, x: 0 }}
-//             transition={{ duration: 0.8 }}
-//             className="flex-1 flex flex-col justify-center"
-//           >
-//             <div className="space-y-6">
-//               <h3 className="text-2xl font-semibold">Let's Connect</h3>
-//               <p className="text-gray-300">
-//                 I'm currently looking for new opportunities. Whether you have a
-//                 question or just want to say hi, I'll get back to you as soon as
-//                 possible!
-//               </p>
-//               <div className="flex space-x-6">
-//                 <a
-//                   href="https://linkedin.com/in/yourusername"
-//                   target="_blank"
-//                   rel="noreferrer"
-//                   className="text-gray-300 hover:text-white transition-colors text-3xl"
-//                 >
-//                   <FaLinkedin />
-//                 </a>
-//                 <a
-//                   href="https://github.com/yourusername"
-//                   target="_blank"
-//                   rel="noreferrer"
-//                   className="text-gray-300 hover:text-white transition-colors text-3xl"
-//                 >
-//                   <FaGithub />
-//                 </a>
-//                 <a
-//                   href="https://twitter.com/yourusername"
-//                   target="_blank"
-//                   rel="noreferrer"
-//                   className="text-gray-300 hover:text-white transition-colors text-3xl"
-//                 >
-//                   <FaTwitter />
-//                 </a>
-//                 <a
-//                   href="mailto:your.email@example.com"
-//                   className="text-gray-300 hover:text-white transition-colors text-3xl"
-//                 >
-//                   <HiOutlineMail />
-//                 </a>
-//               </div>
-//             </div>
-//           </motion.div>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default Contact;
 import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import emailjs from "@emailjs/browser";
@@ -237,7 +73,7 @@ const Contact = () => {
                   name="user_name"
                   className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-white placeholder-gray-400"
                   required
-                  placeholder="John Doe"
+                  placeholder=" YOHANNES"
                 />
               </div>
               <div>
@@ -250,7 +86,7 @@ const Contact = () => {
                   name="user_email"
                   className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-white placeholder-gray-400"
                   required
-                  placeholder="john@example.com"
+                  placeholder="yohannesyeneakal1@gmail"
                 />
               </div>
               <div>
@@ -297,7 +133,7 @@ const Contact = () => {
                   <div className="flex space-x-6">
                     <motion.a
                       whileHover={{ y: -3, color: "#4ADE80" }}
-                      href="https://linkedin.com/in/yourusername"
+                      href="https://www.linkedin.com/in/yohannes-yeneakal-a3b94034b/?originalSubdomain=et"
                       target="_blank"
                       rel="noreferrer"
                       className="text-gray-300 hover:text-green-400 transition-colors text-3xl"
@@ -306,7 +142,7 @@ const Contact = () => {
                     </motion.a>
                     <motion.a
                       whileHover={{ y: -3, color: "#4ADE80" }}
-                      href="https://github.com/yourusername"
+                      href="https://github.com/yohannes369"
                       target="_blank"
                       rel="noreferrer"
                       className="text-gray-300 hover:text-green-400 transition-colors text-3xl"
@@ -315,16 +151,7 @@ const Contact = () => {
                     </motion.a>
                     <motion.a
                       whileHover={{ y: -3, color: "#4ADE80" }}
-                      href="https://twitter.com/yourusername"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-gray-300 hover:text-green-400 transition-colors text-3xl"
-                    >
-                      <FaTwitter />
-                    </motion.a>
-                    <motion.a
-                      whileHover={{ y: -3, color: "#4ADE80" }}
-                      href="mailto:your.email@example.com"
+                      href="mailto:yohannesyeneakal1@gmail.com"
                       className="text-gray-300 hover:text-green-400 transition-colors text-3xl"
                     >
                       <HiOutlineMail />
@@ -335,8 +162,8 @@ const Contact = () => {
                 <div className="pt-4 border-t border-gray-700">
                   <p className="text-gray-400">
                     Prefer email? Drop me a line at <br />
-                    <a href="mailto:your.email@example.com" className="text-green-400 hover:underline">
-                      your.email@example.com
+                    <a href="mailto:yohannesyeneakal1@gmail.com" className="text-green-400 hover:underline">
+                      yohannesyeneakal1@gmail.com
                     </a>
                   </p>
                 </div>

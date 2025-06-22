@@ -87,6 +87,19 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Custom scroll function that prevents URL changes
+  const handleScrollClick = (to) => {
+    const element = document.getElementById(to);
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+      setActiveLink(to);
+      setNav(false); // For mobile menu
+    }
+  };
+
   return (
     <motion.div 
       initial={{ y: -100 }}
@@ -97,10 +110,8 @@ const Navbar = () => {
         scrolled ? "bg-gray-900/95 backdrop-blur-md shadow-lg" : "bg-gray-900/90 backdrop-blur-sm"
       } transition-all duration-300`}
     >
-      <Link
-        to="home"
-        smooth={true}
-        duration={500}
+      <div 
+        onClick={() => handleScrollClick('home')}
         className="flex flex-col items-center cursor-pointer"
       >
         <motion.div 
@@ -114,10 +125,10 @@ const Navbar = () => {
             className="w-12 h-12 object-contain rounded-full bg-white p-1"
           />
           <span className="text-sm font-semibold text-white mt-1">
-            Yohannes Yeneakla
+            Yohannes Yeneakal
           </span>
         </motion.div>
-      </Link>
+      </div>
 
       {/* Desktop Navigation */}
       <motion.ul 
@@ -132,13 +143,8 @@ const Navbar = () => {
             variants={itemVariants}
             className="relative"
           >
-            <Link
-              to={to}
-              smooth={true}
-              duration={500}
-              offset={-80}
-              spy={true}
-              onSetActive={() => setActiveLink(to)}
+            <div
+              onClick={() => handleScrollClick(to)}
               className={`px-3 py-2 text-gray-300 hover:text-white transition-colors cursor-pointer font-medium relative group ${
                 activeLink === to ? "text-white" : ""
               }`}
@@ -150,7 +156,7 @@ const Navbar = () => {
                 } transition-all duration-300`}
                 layoutId="underline"
               />
-            </Link>
+            </div>
           </motion.li>
         ))}
       </motion.ul>
@@ -178,24 +184,23 @@ const Navbar = () => {
             {links.map(({ id, name, to }) => (
               <motion.li 
                 key={id} 
-                className="py-4"
+                className="py-4 text-center"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link
-                  to={to}
-                  smooth={true}
-                  duration={500}
-                  offset={-80}
-                  onClick={() => setNav(false)}
-                  className={`text-2xl px-6 py-3 rounded-lg ${
-                    activeLink === to 
-                      ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white"
-                      : "text-gray-300 hover:text-white"
-                  } transition-all`}
+                <div
+                  onClick={() => handleScrollClick(to)}
+                  className={`px-6 py-3 text-2xl text-gray-300 hover:text-white cursor-pointer font-medium relative group ${
+                    activeLink === to ? "text-white" : ""
+                  }`}
                 >
                   {name}
-                </Link>
+                  <motion.span 
+                    className={`absolute bottom-2 left-1/2 transform -translate-x-1/2 h-0.5 bg-gradient-to-r from-emerald-400 to-green-500 ${
+                      activeLink === to ? "w-4/5" : "w-0 group-hover:w-4/5"
+                    } transition-all duration-300`}
+                  />
+                </div>
               </motion.li>
             ))}
           </motion.ul>

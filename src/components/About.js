@@ -1,94 +1,5 @@
 
 
-// import React from "react";
-// import { motion } from "framer-motion";
-// import { FaReact, FaNodeJs, FaDatabase } from "react-icons/fa";
-// import { SiTypescript, SiTailwindcss, SiNextdotjs } from "react-icons/si";
-
-// const About = () => {
-//   const technologies = [
-//     { icon: <FaReact size={40} />, name: "React" },
-//     { icon: <SiTypescript size={40} />, name: "TypeScript" },
-//     { icon: <SiNextdotjs size={40} />, name: "Next.js" },
-//     { icon: <FaNodeJs size={40} />, name: "Node.js" },
-//     { icon: <SiTailwindcss size={40} />, name: "Tailwind CSS" },
-//     { icon: <FaDatabase size={40} />, name: "Databases" },
-//   ];
-
-//   return (
-//     <section
-//       id="about"
-//       className="w-full min-h-screen bg-gradient-to-b from-gray-800 to-black text-white py-20 px-4"
-//     >
-//       <div className="max-w-screen-lg mx-auto">
-//         <motion.div
-//           initial={{ opacity: 0 }}
-//           whileInView={{ opacity: 1 }}
-//           transition={{ duration: 1 }}
-//           className="text-center mb-16"
-//         >
-//           <h2 className="text-4xl font-bold inline border-b-4 border-cyan-500 pb-1">
-//             About
-//           </h2>
-//           <p className="py-6 text-lg text-gray-300 max-w-2xl mx-auto">
-//             Get to know me better
-//           </p>
-//         </motion.div>
-
-//         <div className="flex flex-col md:flex-row gap-16">
-//           <motion.div
-//             initial={{ opacity: 0, x: -50 }}
-//             whileInView={{ opacity: 1, x: 0 }}
-//             transition={{ duration: 0.8 }}
-//             className="flex-1"
-//           >
-//             <h3 className="text-2xl font-semibold mb-6">Who I Am</h3>
-//             <p className="text-gray-300 mb-4">
-//               I'm a passionate Full Stack Developer with 5+ years of experience
-//               building web applications. I specialize in JavaScript technologies
-//               across the whole stack (React.js, Node.js, Express, MongoDB).
-//             </p>
-//             <p className="text-gray-300 mb-4">
-//               My journey in web development started when I was studying Computer
-//               Science. Since then, I've worked with startups and established
-//               companies to build scalable, performant, and user-friendly
-//               applications.
-//             </p>
-//             <p className="text-gray-300">
-//               When I'm not coding, you can find me hiking, reading tech blogs, or
-//               contributing to open-source projects.
-//             </p>
-//           </motion.div>
-
-//           <motion.div
-//             initial={{ opacity: 0, x: 50 }}
-//             whileInView={{ opacity: 1, x: 0 }}
-//             transition={{ duration: 0.8 }}
-//             className="flex-1"
-//           >
-//             <h3 className="text-2xl font-semibold mb-6">My Skills</h3>
-//             <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
-//               {technologies.map((tech, index) => (
-//                 <motion.div
-//                   key={index}
-//                   whileHover={{ scale: 1.05 }}
-//                   className="flex flex-col items-center p-4 bg-gray-800 rounded-lg shadow-lg hover:bg-gray-700 transition-colors"
-//                 >
-//                   <div className="text-cyan-400 mb-2">{tech.icon}</div>
-//                   <span className="text-gray-300">{tech.name}</span>
-//                 </motion.div>
-//               ))}
-//             </div>
-//           </motion.div>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default About;
-
-
 import React from "react";
 import { motion } from "framer-motion";
 import { FaReact, FaNodeJs, FaDatabase } from "react-icons/fa";
@@ -185,7 +96,7 @@ const About = () => {
           >
             <h3 className="text-3xl font-semibold mb-8">Who I Am</h3>
             <p className="text-xl text-gray-300 mb-6 leading-relaxed">
-              I'm a passionate Full Stack Developer with 5+ years of experience
+              I'm a passionate Full Stack Developer with 2+ years of experience
               building web applications. I specialize in JavaScript technologies
               across the whole stack (React.js, Node.js, Express, MongoDB).
             </p>
@@ -196,8 +107,7 @@ const About = () => {
               applications.
             </p>
             <p className="text-xl text-gray-300 leading-relaxed">
-              When I'm not coding, you can find me hiking, reading tech blogs, or
-              contributing to open-source projects.
+            I can build high-performance and scalable websites. I am also open to volunteering and collaborating on projects
             </p>
           </motion.div>
 
