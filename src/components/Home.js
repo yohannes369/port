@@ -1,6 +1,3 @@
-
-
-
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
@@ -25,8 +22,8 @@ const Home = () => {
   }, []);
 
   const handleDownloadResume = () => {
-    // Replace with your actual resume file path
-    const resumeUrl = "/path/to/your/resume.pdf";
+    // Updated with your resume file path
+    const resumeUrl = "/resume/yohCv.pdf";
     const link = document.createElement("a");
     link.href = resumeUrl;
     link.download = "Yohannes_Yeneakal_Resume.pdf";

@@ -1,201 +1,167 @@
-import React, { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { FaHeart, FaReact, FaNodeJs, FaJs } from "react-icons/fa";
-import { SiThreeDotJs, SiWebgl } from "react-icons/si";
-import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import React, { useEffect, useRef } from 'react';
+import * as THREE from 'three';
 
 const Footer = () => {
-  const threeContainer = useRef(null);
+  const canvasRef = useRef(null);
+  const animationRef = useRef(null);
+  const rendererRef = useRef(null);
+  const particlesRef = useRef(null);
+  const cameraRef = useRef(null);
 
   useEffect(() => {
-    if (!threeContainer.current) return;
+    if (!canvasRef.current) return;
 
-    // Scene setup
+    // Initialize Three.js
+    const ww = window.innerWidth;
+    const wh = window.innerHeight;
+
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({
+      canvas: canvasRef.current,
+      alpha: true,
+      antialias: true
+    });
+    renderer.setSize(ww, wh);
+    rendererRef.current = renderer;
+
+    // Scene
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    const renderer = new THREE.WebGLRenderer({ alpha: true });
-    renderer.setSize(300, 150);
-    renderer.setClearColor(0x000000, 0);
-    threeContainer.current.appendChild(renderer.domElement);
 
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0x404040);
-    scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    directionalLight.position.set(1, 1, 1);
-    scene.add(directionalLight);
+    // Camera
+    const camera = new THREE.OrthographicCamera(ww/-2, ww/2, wh/2, wh/-2, 0, 1000);
+    camera.position.set(0, 0, 500);
+    cameraRef.current = camera;
+    scene.add(camera);
 
-    // Create 3D text
-    const createText = (text, yPos) => {
-      const loader = new THREE.FontLoader();
-      loader.load(
-        "https://threejs.org/examples/fonts/helvetiker_regular.typeface.json",
-        (font) => {
-          const geometry = new THREE.TextGeometry(text, {
-            font: font,
-            size: 0.5,
-            height: 0.1,
-            curveSegments: 12,
-            bevelEnabled: true,
-            bevelThickness: 0.01,
-            bevelSize: 0.02,
-            bevelOffset: 0,
-            bevelSegments: 5,
-          });
+    // Particles container
+    const particles = new THREE.Group();
+    particlesRef.current = particles;
+    scene.add(particles);
 
-          const material = new THREE.MeshPhongMaterial({
-            color: 0x4fd1c5,
-            specular: 0x111111,
-            shininess: 30,
-          });
+    // Mouse position
+    const mouse = { x: 0, y: 0 };
 
-          const mesh = new THREE.Mesh(geometry, material);
-          mesh.position.x = -text.length * 0.25;
-          mesh.position.y = yPos;
-          scene.add(mesh);
-        }
-      );
+    const handleMouseMove = (e) => {
+      mouse.x = e.clientX - (ww/2);
+      mouse.y = (wh/2) - e.clientY;
     };
 
-    createText("Yohannes", 1);
-    createText("Yenakal", 0);
-    createText("Web Developer", -1);
+    // Handle window resize
+    const handleResize = () => {
+      const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
+      
+      cameraRef.current.left = -newWidth / 2;
+      cameraRef.current.right = newWidth / 2;
+      cameraRef.current.top = newHeight / 2;
+      cameraRef.current.bottom = -newHeight / 2;
+      cameraRef.current.updateProjectionMatrix();
+      
+      rendererRef.current.setSize(newWidth, newHeight);
+    };
 
-    // Add floating cubes
-    const cubes = [];
-    const cubeGeometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
-    const cubeMaterial = new THREE.MeshPhongMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.7,
-    });
+    // Create particle
+    const createParticle = () => {
+      const geometry = new THREE.BufferGeometry();
+      const vertices = new Float32Array([mouse.x, mouse.y, -10]);
+      geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+      
+      const material = new THREE.PointsMaterial({
+        color: 0x4ade80, // Tailwind green-400
+        size: 3,
+        transparent: true,
+        opacity: 0.8,
+        sizeAttenuation: false
+      });
 
-    for (let i = 0; i < 5; i++) {
-      const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-      cube.position.x = (Math.random() - 0.5) * 5;
-      cube.position.y = (Math.random() - 0.5) * 3;
-      cube.position.z = Math.random() * -5;
-      scene.add(cube);
-      cubes.push(cube);
-    }
+      const particle = new THREE.Points(geometry, material);
+      particle.speed = Math.random() / 100 + 0.002;
+      particle.direction = {
+        x: (Math.random() - 0.5) * ww * 2,
+        y: (Math.random() - 0.5) * wh * 2
+      };
 
-    camera.position.z = 5;
-
-    // Controls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableZoom = false;
-    controls.enablePan = false;
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 1;
+      particles.add(particle);
+    };
 
     // Animation loop
     const animate = () => {
-      requestAnimationFrame(animate);
+      animationRef.current = requestAnimationFrame(animate);
 
-      cubes.forEach((cube, idx) => {
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-        cube.position.y = Math.sin(Date.now() * 0.001 + idx) * 0.5;
-      });
+      createParticle();
 
-      controls.update();
+      const particles = particlesRef.current;
+      if (!particles) return;
+
+      for (let i = particles.children.length - 1; i >= 0; i--) {
+        const particle = particles.children[i];
+        const positions = particle.geometry.attributes.position.array;
+
+        positions[0] += (particle.direction.x - positions[0]) * particle.speed;
+        positions[1] += (particle.direction.y - positions[1]) * particle.speed;
+        particle.material.opacity -= 0.005;
+        particle.geometry.attributes.position.needsUpdate = true;
+
+        if (particle.material.opacity < 0.05) {
+          particles.remove(particle);
+        }
+      }
+
       renderer.render(scene, camera);
     };
 
+    // Event listeners
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchmove', (e) => {
+      handleMouseMove(e.touches[0]);
+    });
+    window.addEventListener('resize', handleResize);
+
+    // Start animation
     animate();
 
     // Cleanup
     return () => {
-      if (threeContainer.current) {
-        threeContainer.current.removeChild(renderer.domElement);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleMouseMove);
+      window.removeEventListener('resize', handleResize);
+      
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      
+      if (rendererRef.current) {
+        rendererRef.current.dispose();
       }
     };
   }, []);
 
   return (
-    <footer className="w-full bg-gray-900 text-gray-300 py-12 px-4 border-t border-gray-800">
-      <div className="max-w-screen-lg mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col items-center justify-center text-center"
-        >
-          {/* 3D Animation Container */}
-          <div
-            ref={threeContainer}
-            className="w-full h-40 mb-6 flex items-center justify-center"
-          />
-
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            className="mb-6 p-4 rounded-lg bg-gray-800 bg-opacity-50 backdrop-blur-sm"
-          >
-            <p className="text-xl font-mono">
-              <span className="text-cyan-400">{"<"}</span>
-              <span className="text-purple-400">CreativeDeveloper</span>
-              <span className="text-cyan-400">{">"}</span>
-              <span className="mx-2">Yohannes Yenakal</span>
-              <span className="text-cyan-400">{"</"}</span>
-              <span className="text-purple-400">CreativeDeveloper</span>
-              <span className="text-cyan-400">{">"}</span>
-            </p>
-          </motion.div>
-
-          <div className="flex flex-wrap justify-center gap-6 mb-6">
-            <motion.div
-              whileHover={{ scale: 1.2, rotate: 15 }}
-              className="flex flex-col items-center"
+    <footer className="relative bg-gray-900 text-white overflow-hidden h-48">
+      {/* Particle canvas */}
+      <canvas 
+        ref={canvasRef} 
+        className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-30"
+      />
+      
+      {/* Footer content */}
+      <div className="container mx-auto px-4 py-8 relative z-10 h-full flex flex-col justify-center items-center">
+        <p className="text-sm mb-4">
+          &copy; {new Date().getFullYear()} My App. All rights reserved.
+        </p>
+        
+        <div className="flex space-x-6">
+          {['Privacy Policy', 'Terms of Service', 'Contact Us'].map((link, index) => (
+            <a
+              key={index}
+              href={`/${link.toLowerCase().replace(' ', '-')}`}
+              className="text-green-400 hover:text-green-300 transition-colors duration-300 relative group"
             >
-              <FaReact className="text-4xl text-cyan-400 mb-2" />
-              <span className="text-xs">React</span>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.2, rotate: -15 }}
-              className="flex flex-col items-center"
-            >
-              <SiThreeDotJs className="text-4xl text-green-300 mb-2" />
-              <span className="text-xs">Three.js</span>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.2, rotate: 15 }}
-              className="flex flex-col items-center"
-            >
-              <FaNodeJs className="text-4xl text-green-500 mb-2" />
-              <span className="text-xs">Node.js</span>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.2, rotate: -15 }}
-              className="flex flex-col items-center"
-            >
-              <SiWebgl className="text-4xl text-yellow-400 mb-2" />
-              <span className="text-xs">WebGL</span>
-            </motion.div>
-          </div>
-
-          <motion.p
-            className="flex items-center mb-4"
-            whileHover={{ scale: 1.1 }}
-          >
-            Crafted with <FaHeart className="mx-2 text-red-500 animate-pulse" />{" "}
-            by Yohannes Yenakal
-          </motion.p>
-
-          <motion.p
-            className="text-sm opacity-80"
-            animate={{ opacity: [0.6, 1, 0.6] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          >
-            &copy; {new Date().getFullYear()} All Rights Reserved | 3D Web
-            Experiences
-          </motion.p>
-        </motion.div>
+              {link}
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-400 group-hover:w-full transition-all duration-300"></span>
+            </a>
+          ))}
+        </div>
       </div>
     </footer>
   );
